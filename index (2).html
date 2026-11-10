@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظرسنجی</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', Tahoma, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .header .logo {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 28px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+        }
+
+        input[type="tel"],
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            background: #0f172a;
+            color: #f1f5f9;
+            font-size: 1rem;
+            transition: all 0.2s;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #334155;
+            color: #e2e8f0;
+            margin-top: 12px;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        .loading-box {
+            text-align: center;
+            padding: 20px 10px;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(59, 130, 246, 0.2);
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-box h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #f1f5f9;
+        }
+
+        .loading-box p {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .timer {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #60a5fa;
+            margin: 16px 0;
+            letter-spacing: 2px;
+        }
+
+        .otp-box {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .otp-box.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .otp-code-display {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 12px;
+            color: #34d399;
+            background: rgba(52, 211, 153, 0.1);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .admin-select-box h3 {
+            font-size: 1rem;
+            margin-bottom: 14px;
+            text-align: center;
+            color: #e2e8f0;
+        }
+
+        .admins-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .admin-card {
+            background: #0f172a;
+            border: 2px solid #1e293b;
+            border-radius: 12px;
+            padding: 12px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .admin-card:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .admin-card.selected {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.2);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .admin-card input {
+            display: none;
+        }
+
+        .question {
+            background: #0f172a;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 16px;
+            border: 1px solid #1e293b;
+        }
+
+        .question h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: #f1f5f9;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: #1e293b;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: 1px solid transparent;
+        }
+
+        .option:hover {
+            background: #334155;
+        }
+
+        .option input {
+            accent-color: #3b82f6;
+            width: 18px;
+            height: 18px;
+        }
+
+        .option.selected {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+        .option span {
+            font-size: 0.9rem;
+        }
+
+        .result-item {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid #1e293b;
+        }
+
+        .result-item .phone {
+            font-weight: 600;
+            color: #60a5fa;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+
+        .result-item .admin-name {
+            font-size: 0.9rem;
+            color: #a5b4fc;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .result-item .answer {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 4px;
+            padding-right: 8px;
+            border-right: 2px solid #334155;
+        }
+
+        .result-item .time {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-box {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid #1e293b;
+        }
+
+        .stat-box .num {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #60a5fa;
+        }
+
+        .stat-box .label {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        .ranking-box {
+            background: #0f172a;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #1e293b;
+        }
+
+        .ranking-box h3 {
+            font-size: 1rem;
+            margin-bottom: 14px;
+            text-align: center;
+            color: #e2e8f0;
+        }
+
+        .rank-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            background: #1e293b;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .rank-item .name {
+            color: #e2e8f0;
+        }
+
+        .rank-item .count {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .rank-item.top {
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+
+        .message {
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+
+        .message.success {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+        }
+
+        .message.info {
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #93c5fd;
+        }
+
+        .admin-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85rem;
+        }
+
+        .admin-link a {
+            color: #64748b;
+            text-decoration: none;
+        }
+
+        .admin-link a:hover {
+            color: #94a3b8;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .footer strong {
+            color: #94a3b8;
+        }
+
+        .selected-admin-info {
+            text-align: center;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #a5b4fc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="logo">📊</div>
+                <h1>نظرسنجی</h1>
+                <p>کانال رشد</p>
+            </div>
+
+            <!-- Step 1: Phone -->
+            <div id="step-phone" class="step active">
+                <div class="form-group">
+                    <label>شماره موبایل خود را وارد کنید</label>
+                    <input type="tel" id="phone" placeholder="09123456789" maxlength="11">
+                </div>
+                <button class="btn btn-primary" id="btn-send" onclick="sendCode()">ارسال کد تأیید</button>
+                <div class="admin-link">
+                    <a href="#" onclick="showAdminLogin(); return false;">ورود ادمین</a>
+                </div>
+            </div>
+
+            <!-- Step 2: OTP Simulation -->
+            <div id="step-otp" class="step">
+                <div class="loading-box">
+                    <div class="spinner" id="otp-spinner"></div>
+                    <h3 id="otp-title">در حال ارسال کد تأیید...</h3>
+                    <p id="otp-desc">لطفاً صبر کنید</p>
+                    <div class="timer" id="otp-timer">۷</div>
+                    <p style="font-size:0.85rem; color:#64748b;">
+                        شماره: <span id="display-phone"></span>
+                    </p>
+                </div>
+
+                <div class="otp-box" id="otp-received">
+                    <p style="color:#86efac; margin-bottom:8px;">✅ کد تأیید دریافت شد</p>
+                    <div class="otp-code-display" id="otp-code">----</div>
+                    <p style="font-size:0.85rem; color:#94a3b8;">در حال ورود خودکار...</p>
+                </div>
+            </div>
+
+            <!-- Step 3: Select Admin + Questions -->
+            <div id="step-questions" class="step">
+                <div class="message info" id="welcome-msg"></div>
+
+                <div class="admin-select-box" id="admin-select-section">
+                    <h3>کدام ادمین را ارزیابی می‌کنید؟</h3>
+                    <div class="admins-grid" id="admins-grid"></div>
+                    <button class="btn btn-primary" style="margin-top:16px" onclick="goToQuestions()">ادامه و پاسخ به سؤالات</button>
+                </div>
+
+                <div id="questions-section" style="display:none;">
+                    <div class="selected-admin-info" id="selected-admin-info"></div>
+                    <div id="questions-container"></div>
+                    <button class="btn btn-primary" onclick="submitVote()">ثبت رأی</button>
+                    <button class="btn btn-secondary" onclick="backToAdminSelect()">تغییر ادمین</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Success + Public Results -->
+            <div id="step-success" class="step">
+                <div class="message success">
+                    ✅ رأی شما با موفقیت ثبت شد.<br>
+                    از مشارکت شما متشکریم.
+                </div>
+
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="num" id="public-total">376</div>
+                        <div class="label">تعداد کل شرکت‌کنندگان</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="num" id="public-my-votes">0</div>
+                        <div class="label">رأی شما ثبت شد</div>
+                    </div>
+                </div>
+
+                <div class="ranking-box">
+                    <h3>رتبه‌بندی ادمین‌ها (تعداد رأی)</h3>
+                    <div id="public-ranking"></div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="location.reload()">خروج</button>
+            </div>
+
+            <!-- Step 5: Admin Results -->
+            <div id="step-results" class="step">
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="num" id="total-votes">0</div>
+                        <div class="label">تعداد کل آرا</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="num" id="unique-phones">0</div>
+                        <div class="label">تعداد شرکت‌کنندگان</div>
+                    </div>
+                </div>
+
+                <div class="ranking-box">
+                    <h3>رتبه‌بندی ادمین‌ها</h3>
+                    <div id="admin-ranking"></div>
+                </div>
+
+                <h3 style="margin-bottom:16px; font-size:1rem;">جزئیات آرا (فقط ادمین)</h3>
+                <div id="results-list"></div>
+
+                <button class="btn btn-secondary" onclick="backFromResults()">بازگشت</button>
+                <button class="btn btn-danger" style="margin-top:10px" onclick="clearAllVotes()">پاک کردن همه آرا</button>
+            </div>
+
+            <!-- Admin Login -->
+            <div id="step-admin" class="step">
+                <div class="form-group">
+                    <label>شماره موبایل ادمین</label>
+                    <input type="tel" id="admin-phone" placeholder="09123456789" maxlength="11">
+                </div>
+                <div class="form-group">
+                    <label>رمز عبور</label>
+                    <input type="password" id="admin-pass" placeholder="رمز عبور را وارد کنید">
+                </div>
+                <button class="btn btn-primary" onclick="checkAdmin()">ورود به پنل نتایج</button>
+                <button class="btn btn-secondary" onclick="backToPhone()">بازگشت</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            ایجاد شده توسط <strong>کانال رشد</strong>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = "admin123";
+
+        const admins = [
+            "سید حسین حسینی",
+            "علی رضایی",
+            "محمد کریمی",
+            "سارا احمدی",
+            "رضا موسوی",
+            "فاطمه محمدی",
+            "امیر حسینی",
+            "نرگس کاظمی",
+            "حسین اکبری",
+            "مریم جعفری"
+        ];
+
+        const questions = [
+            { id: 1, text: "رفتار این ادمین با اعضا چگونه بوده؟" },
+            { id: 2, text: "میزان پاسخگویی و در دسترس بودن این ادمین چطور بوده؟" },
+            { id: 3, text: "آیا این ادمین به تعهدات و قول‌هایش عمل می‌کند؟" },
+            { id: 4, text: "نظم و مدیریت این ادمین را چگونه ارزیابی می‌کنید؟" },
+            { id: 5, text: "به طور کلی عملکرد این ادمین را چگونه می‌بینید؟" }
+        ];
+
+        const options = [
+            { value: "عالی", label: "عالی" },
+            { value: "خوب", label: "خوب" },
+            { value: "متوسط", label: "متوسط" },
+            { value: "ضعیف", label: "ضعیف" },
+            { value: "خیلی ضعیف", label: "خیلی ضعیف" }
+        ];
+
+        const FAKE_TOTAL = 378;
+        const FAKE_FOR_HOSSEIN = 47;
+
+        let currentPhone = "";
+        let selectedAdmin = "";
+        let isAdmin = false;
+        let countdownInterval = null;
+
+        function initFakeData() {
+            if (localStorage.getItem('survey_initialized_v2')) return;
+
+            const votes = [];
+            const answersSample = [
+                [{question: questions[0].text, answer: "عالی"}, {question: questions[1].text, answer: "خوب"}, {question: questions[2].text, answer: "عالی"}, {question: questions[3].text, answer: "خوب"}, {question: questions[4].text, answer: "عالی"}],
+                [{question: questions[0].text, answer: "خوب"}, {question: questions[1].text, answer: "عالی"}, {question: questions[2].text, answer: "خوب"}, {question: questions[3].text, answer: "متوسط"}, {question: questions[4].text, answer: "خوب"}],
+                [{question: questions[0].text, answer: "عالی"}, {question: questions[1].text, answer: "عالی"}, {question: questions[2].text, answer: "عالی"}, {question: questions[3].text, answer: "عالی"}, {question: questions[4].text, answer: "عالی"}],
+                [{question: questions[0].text, answer: "خوب"}, {question: questions[1].text, answer: "خوب"}, {question: questions[2].text, answer: "متوسط"}, {question: questions[3].text, answer: "خوب"}, {question: questions[4].text, answer: "خوب"}]
+            ];
+
+            // توزیع طبیعی رأی‌ها (سید حسین حسینی نفر سوم)
+            const voteDistribution = {
+                "علی رضایی": 62,
+                "محمد کریمی": 54,
+                "سید حسین حسینی": 47,
+                "سارا احمدی": 41,
+                "رضا موسوی": 38,
+                "فاطمه محمدی": 35,
+                "امیر حسینی": 31,
+                "نرگس کاظمی": 28,
+                "حسین اکبری": 24,
+                "مریم جعفری": 18
+            };
+
+            let phoneCounter = 100000000;
+
+            for (const [adminName, count] of Object.entries(voteDistribution)) {
+                for (let i = 0; i < count; i++) {
+                    votes.push({
+                        phone: "09" + String(phoneCounter++).slice(1),
+                        admin: adminName,
+                        answers: answersSample[i % 4],
+                        time: "۱۴۰۳/۰۸/" + String(5 + (i % 25)).padStart(2, "0") + " - " + String(10 + (i % 12)).padStart(2, "0") + ":" + String(10 + (i % 50)).padStart(2, "0"),
+                        fake: true
+                    });
+                }
+            }
+
+            localStorage.setItem('survey_votes', JSON.stringify(votes));
+            localStorage.setItem('survey_initialized_v2', 'true');
+        }
+
+        function showStep(stepId) {
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            document.getElementById(stepId).classList.add('active');
+        }
+
+        function getVotes() {
+            return JSON.parse(localStorage.getItem('survey_votes') || '[]');
+        }
+
+        function saveVotes(votes) {
+            localStorage.setItem('survey_votes', JSON.stringify(votes));
+        }
+
+        function hasVoted(phone) {
+            return getVotes().some(v => v.phone === phone && !v.fake);
+        }
+
+        function getAdminCounts() {
+            const votes = getVotes();
+            const counts = {};
+            admins.forEach(a => counts[a] = 0);
+            votes.forEach(v => {
+                if (counts[v.admin] !== undefined) counts[v.admin]++;
+            });
+            return counts;
+        }
+
+        function renderRanking(containerId) {
+            const counts = getAdminCounts();
+            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            sorted.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'rank-item' + (index === 0 ? ' top' : '');
+                div.innerHTML = '<span class="name">' + (index + 1) + '. ' + item[0] + '</span><span class="count">' + item[1] + ' رأی</span>';
+                container.appendChild(div);
+            });
+        }
+
+        function sendCode() {
+            const phone = document.getElementById('phone').value.trim();
+            const btn = document.getElementById('btn-send');
+
+            if (!/^09\d{9}$/.test(phone)) {
+                alert('لطفاً یک شماره موبایل معتبر ایرانی وارد کنید (مثال: 09123456789)');
+                return;
+            }
+
+            if (hasVoted(phone)) {
+                alert('این شماره قبلاً در نظرسنجی شرکت کرده است.');
+                return;
+            }
+
+            currentPhone = phone;
+            document.getElementById('display-phone').textContent = phone;
+            btn.disabled = true;
+            btn.textContent = 'در حال ارسال...';
+
+            // ریست صفحه OTP
+            document.getElementById('otp-spinner').style.display = 'block';
+            document.getElementById('otp-title').textContent = 'در حال ارسال کد تأیید...';
+            document.getElementById('otp-desc').textContent = 'لطفاً صبر کنید';
+            document.getElementById('otp-timer').style.display = 'block';
+            document.getElementById('otp-received').classList.remove('active');
+
+            showStep('step-otp');
+
+            // تایمر ۱۵ ثانیه
+            let timeLeft = 7;
+            document.getElementById('otp-timer').textContent = timeLeft;
+
+            if (countdownInterval) clearInterval(countdownInterval);
+
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('otp-timer').textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+
+                    // تولید کد رندوم ۴ رقمی
+                    const code = Math.floor(1000 + Math.random() * 9000).toString();
+
+                    // مخفی کردن لودینگ و نشون دادن کد
+                    document.getElementById('otp-spinner').style.display = 'none';
+                    document.getElementById('otp-title').textContent = 'کد تأیید ارسال شد';
+                    document.getElementById('otp-desc').textContent = '';
+                    document.getElementById('otp-timer').style.display = 'none';
+
+                    document.getElementById('otp-code').textContent = code;
+                    document.getElementById('otp-received').classList.add('active');
+
+                    // بعد از ۳ ثانیه خودکار بره صفحه رأی
+                    setTimeout(() => {
+                        document.getElementById('welcome-msg').textContent = 'سلام! شماره شما: ' + currentPhone;
+                        renderAdmins();
+                        document.getElementById('admin-select-section').style.display = 'block';
+                        document.getElementById('questions-section').style.display = 'none';
+                        showStep('step-questions');
+                        btn.disabled = false;
+                        btn.textContent = 'ارسال کد تأیید';
+                    }, 3000);
+                }
+            }, 1000);
+        }
+
+        function backToPhone() {
+            if (countdownInterval) clearInterval(countdownInterval);
+            showStep('step-phone');
+            document.getElementById('phone').value = '';
+            document.getElementById('admin-phone').value = '';
+            document.getElementById('admin-pass').value = '';
+            isAdmin = false;
+            selectedAdmin = "";
+        }
+
+        function renderAdmins() {
+            const grid = document.getElementById('admins-grid');
+            grid.innerHTML = '';
+
+            admins.forEach((name) => {
+                const div = document.createElement('label');
+                div.className = 'admin-card';
+                div.innerHTML = '<input type="radio" name="admin" value="' + name + '">' + name;
+                div.onclick = function() {
+                    document.querySelectorAll('.admin-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                };
+                grid.appendChild(div);
+            });
+        }
+
+        function goToQuestions() {
+            const selected = document.querySelector('input[name="admin"]:checked');
+            if (!selected) {
+                alert('لطفاً یک ادمین را انتخاب کنید.');
+                return;
+            }
+
+            selectedAdmin = selected.value;
+            document.getElementById('selected-admin-info').textContent = 'در حال ارزیابی: ' + selectedAdmin;
+            document.getElementById('admin-select-section').style.display = 'none';
+            document.getElementById('questions-section').style.display = 'block';
+            renderQuestions();
+        }
+
+        function backToAdminSelect() {
+            document.getElementById('admin-select-section').style.display = 'block';
+            document.getElementById('questions-section').style.display = 'none';
+            selectedAdmin = "";
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const div = document.createElement('div');
+                div.className = 'question';
+                div.innerHTML = '<h3>' + (index + 1) + '. ' + q.text + '</h3><div class="options">' +
+                    options.map(opt => '<label class="option"><input type="radio" name="q' + q.id + '" value="' + opt.value + '"><span>' + opt.label + '</span></label>').join('') +
+                    '</div>';
+                container.appendChild(div);
+            });
+
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.addEventListener('click', function() {
+                    const name = this.querySelector('input').name;
+                    document.querySelectorAll('input[name="' + name + '"]').forEach(inp => {
+                        inp.closest('.option').classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                });
+            });
+        }
+
+        function submitVote() {
+            const answers = [];
+            for (let q of questions) {
+                const selected = document.querySelector('input[name="q' + q.id + '"]:checked');
+                if (!selected) {
+                    alert('لطفاً به سؤال ' + q.id + ' پاسخ دهید.');
+                    return;
+                }
+                answers.push({ question: q.text, answer: selected.value });
+            }
+
+            const votes = getVotes();
+            votes.push({
+                phone: currentPhone,
+                admin: selectedAdmin,
+                answers: answers,
+                time: new Date().toLocaleString('fa-IR'),
+                fake: false
+            });
+            saveVotes(votes);
+
+            document.getElementById('public-total').textContent = votes.length;
+            renderRanking('public-ranking');
+            showStep('step-success');
+        }
+
+        function showResults() {
+            const votes = getVotes();
+            document.getElementById('total-votes').textContent = votes.length;
+            document.getElementById('unique-phones').textContent = votes.filter(v => !v.fake).length + ' واقعی';
+
+            renderRanking('admin-ranking');
+
+            const list = document.getElementById('results-list');
+            list.innerHTML = '';
+
+            const realVotes = votes.filter(v => !v.fake).reverse();
+
+            if (realVotes.length === 0) {
+                list.innerHTML = '<div class="message info">هنوز رأی واقعی ثبت نشده است.</div>';
+            } else {
+                realVotes.forEach(vote => {
+                    const div = document.createElement('div');
+                    div.className = 'result-item';
+                    div.innerHTML = 
+                        '<div class="phone">📱 ' + vote.phone + '</div>' +
+                        '<div class="admin-name">👤 ادمین: ' + (vote.admin || 'نامشخص') + '</div>' +
+                        vote.answers.map((a, i) => '<div class="answer">' + (i + 1) + '. ' + a.answer + '</div>').join('') +
+                        '<div class="time">' + vote.time + '</div>';
+                    list.appendChild(div);
+                });
+            }
+            showStep('step-results');
+        }
+
+        function backFromResults() {
+            if (isAdmin) {
+                showStep('step-admin');
+            } else {
+                showStep('step-success');
+            }
+        }
+
+        function clearAllVotes() {
+            if (confirm('آیا مطمئن هستید؟ همه آرا (شامل داده‌های نمایشی) پاک می‌شوند.')) {
+                localStorage.removeItem('survey_votes');
+                localStorage.removeItem('survey_initialized_v2');
+                initFakeData();
+                showResults();
+            }
+        }
+
+        function showAdminLogin() {
+            showStep('step-admin');
+        }
+
+        function checkAdmin() {
+            const phone = document.getElementById('admin-phone').value.trim();
+            const pass = document.getElementById('admin-pass').value;
+
+            if (!/^09\d{9}$/.test(phone)) {
+                alert('شماره موبایل معتبر وارد کنید.');
+                return;
+            }
+
+            if (pass !== ADMIN_PASSWORD) {
+                alert('رمز عبور اشتباه است.');
+                return;
+            }
+
+            isAdmin = true;
+            showResults();
+        }
+
+        initFakeData();
+    </script>
+</body>
+</html>
